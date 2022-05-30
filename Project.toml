@@ -1,0 +1,7 @@
+name = "GeneralizedPhase"
+uuid = "13235c25-d339-4138-a8bf-65c4e89d8d0a"
+authors = ["brendanjohnharris <brendanjohnharris@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+AxisKeys = "94b1ba4f-4ee9-5380-92f1-94cde586c3c5"
