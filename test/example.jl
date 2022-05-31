@@ -54,3 +54,26 @@ lines!(ins, _x, _y; color=t, linewidth=25, colormap)
 file = try; normpath(@__DIR__, "../")*"example.png"; catch; mktemp()*".png"; end
 save(file, f; px_per_unit=5)
 print("Saved figure to "*file)
+
+
+# ? ------------ Compare generalized phase to temporal filtering ----------- ? #
+f = Figure(resolution=(600, 300), backgroundcolor=:transparent)
+ax = Axis(f[2, 1], backgroundcolor=:transparent)
+lines!(ax, times, generalized_phase(x, fs, lp), color=:crimson, linewidth=4, label="Generalized phase")
+lines!(ax, times, angle.(hilbert(ỹ)); color=:cornflowerblue, linewidth=4, label="Analytic phase after filtering")
+xlims!(0.06, 0.65)
+hidespines!(ax); hidedecorations!(ax)
+L = Legend(f[1, 1], ax,
+            width=Relative(0.3),
+            height=Relative(0.1),
+            bgcolor=:transparent,
+            framevisible=false,
+            labelcolor=:gray50,
+            tellwidth=true,
+            tellheight=true,
+            padding=0.0,
+            orientation = :horizontal)
+rowsize!(f.layout, 1, Relative(0.05))
+file = try; normpath(@__DIR__, "../")*"comparison.png"; catch; mktemp()*".png"; end
+save(file, f; px_per_unit=5)
+print("Saved figure to "*file)
