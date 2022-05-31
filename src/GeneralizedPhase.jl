@@ -1,6 +1,6 @@
 module GeneralizedPhase
 
-export generalized_phase
+export generalized_phase, _generalized_phase
 
 using Requires
 function __init__()
