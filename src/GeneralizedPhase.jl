@@ -2,6 +2,11 @@ module GeneralizedPhase
 
 export generalized_phase
 
+using Requires
+function __init__()
+    @require AxisKeys="94b1ba4f-4ee9-5380-92f1-94cde586c3c5" include("AxisKeys.jl")
+end
+
 using Statistics
 using Dierckx
 import DSP: hilbert, Unwrap.unwrap!, Bandpass, Butterworth, digitalfilter, filtfilt
@@ -33,7 +38,7 @@ end
 
 rewrap!(𝜑) = (𝜑 .= mod.(𝜑 .+ π, 2*π) .- π)
 
-function _generalized_phase(x::AbstractVector, fs, lp)
+function _generalized_phase(x::AbstractVector, fs, lp=0.0)
     nwin = 3; # Sets the 'buffer' to interpolate over after neg. freq. periods, in terms of the length of the neg. freq. window.
     𝛥𝑡 = 1/fs
     𝑠 = hilbert(x)
@@ -55,9 +60,6 @@ function _generalized_phase(x::AbstractVector, fs, lp)
 end
 
 _phasefilter(x, fs; band=[5, 40]) = filtfilt(digitalfilter(Bandpass(band...; fs), Butterworth(4)), x)
-function generalized_phase(x, fs, args...; kw...)
-    x = _phasefilter(x, fs; kw...)
-    _generalized_phase(x, fs, args...)
-end
+generalized_phase(x, fs, args...; kw...) = _generalized_phase(_phasefilter(x, fs; kw...), fs, args...)
 
 end # module
