@@ -39,7 +39,6 @@ function _generalized_phase(x::AbstractVector, fs, lp)
     𝑠 = hilbert(x)
     𝜑 = angle.(𝑠)
     𝜔 = ifreq(𝑠, 𝛥𝑡)
-    # ? We won't bother rectifying the rotation direction here, but we will check for the dominat direction of 𝜔
     dir = filter(!isnan, 𝜔) |> mean |> sign
     idx = dir.*(𝜔) .< lp
     idx[1] = false
