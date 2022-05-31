@@ -31,7 +31,7 @@ ỹ = GeneralizedPhase._phasefilter(y, fs)
 
 # ? --------------------------------- Plots -------------------------------- ? #
 colormap = :cyclic_mygbm_30_95_c78_n256_s25 # :cyclic_wrwbw_40_90_c42_n256_s25
-f = Figure(resolution=(1100, 500))
+f = Figure(resolution=(1500, 500))
 ax = Axis(f[1, 1])
 lines!(ax, times, y, color=:black, linewidth=7, label="Raw signal")
 lines!(ax, times, ỹ; color=𝜑, linewidth=7, colormap, label="Filtered signal w/ generalized phase")
@@ -53,6 +53,6 @@ _x = cos.(t)
 _y = sin.(t)
 lines!(ins, _x, _y; color=t, linewidth=25, colormap)
 f
-file = mktemp()[1]*".pdf"
-save(file, f)
+file = try; normpath(@__DIR__, "../")*"example.png"; catch; mktemp()*".png"; end
+save(file, f; px_per_unit=10)
 print("Saved figure to "*file)
