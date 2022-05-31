@@ -3,7 +3,7 @@ Implement [mullerlab/generalized-phase](https://github.com/mullerlab/generalized
 
 ![example figure](example.png)
 
-Examples:
+### Usage
 ```
 using GeneralizedPhase
 t = 0.001:0.001:10
