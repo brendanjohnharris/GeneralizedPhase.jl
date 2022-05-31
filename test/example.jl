@@ -1,4 +1,5 @@
 using GeneralizedPhase
+using DSP
 using MAT
 using HTTP
 using CairoMakie
@@ -31,9 +32,9 @@ ỹ = GeneralizedPhase._phasefilter(y, fs)
 
 # ? --------------------------------- Plots -------------------------------- ? #
 colormap = :cyclic_mygbm_30_95_c78_n256_s25 # :cyclic_wrwbw_40_90_c42_n256_s25
-f = Figure(resolution=(1500, 500))
-ax = Axis(f[1, 1])
-lines!(ax, times, y, color=:black, linewidth=7, label="Raw signal")
+f = Figure(resolution=(1500, 500), backgroundcolor=:transparent)
+ax = Axis(f[1, 1], backgroundcolor=:transparent)
+lines!(ax, times, y, color=:gray50, linewidth=7, label="Raw signal")
 lines!(ax, times, ỹ; color=𝜑, linewidth=7, colormap, label="Filtered signal w/ generalized phase")
 xlims!(0.06, 0.65)
 hidespines!(ax); hidedecorations!(ax)
@@ -43,16 +44,13 @@ ins = Axis(f[1, 1],
             height=Relative(0.3),
             aspect=DataAspect(),
             valign=:top,
-            halign=:left)
-text!(ins, "GP", align=(:center, :center), textsize=30, color=:black, position=CairoMakie.Point2f0(0, 0))
-xlims!(ins, -1.5, 1.5)
-ylims!(ins, -1.5, 1.5)
+            halign=:left,
+            backgroundcolor=:transparent)
+text!(ins, "GP", align=(:center, :center), textsize=30, color=:gray50, position=CairoMakie.Point2f0(0, 0))
+xlims!(ins, -1.5, 1.5); ylims!(ins, -1.5, 1.5)
 hidespines!(ins); hidedecorations!(ins)
-t = -0.01:0.01:2π
-_x = cos.(t)
-_y = sin.(t)
+t = -0.01:0.01:2π; _x = cos.(t); _y = sin.(t)
 lines!(ins, _x, _y; color=t, linewidth=25, colormap)
-f
 file = try; normpath(@__DIR__, "../")*"example.png"; catch; mktemp()*".png"; end
-save(file, f; px_per_unit=10)
+save(file, f; px_per_unit=5)
 print("Saved figure to "*file)

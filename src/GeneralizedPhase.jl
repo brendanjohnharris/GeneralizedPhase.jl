@@ -4,7 +4,7 @@ export generalized_phase
 
 using Statistics
 using Dierckx
-import DSP: hilbert, Unwrap.unwrap!
+import DSP: hilbert, Unwrap.unwrap!, Bandpass, Butterworth, digitalfilter, filtfilt
 rewrap(xp) = @. xp - 2*π*floor((xp-π)/(2*π)) - 2*π
 
 interp1(x, y; k=3, bc="extrapolate", kw...) = Spline1D(x, y; k, bc, kw...) # 3rd order spline instead of hermite
