@@ -9,7 +9,8 @@ end
 
 using Statistics
 using Dierckx
-import DSP: hilbert, Unwrap.unwrap!, Bandpass, Butterworth, digitalfilter, filtfilt
+import DSP: hilbert, Bandpass, Butterworth, digitalfilter, filtfilt, Unwrap.unwrap!
+
 rewrap(xp) = @. xp - 2*π*floor((xp-π)/(2*π)) - 2*π
 
 interp1(x, y; k=3, bc="extrapolate", kw...) = Spline1D(x, y; k, bc, kw...) # 3rd order spline instead of hermite
@@ -36,9 +37,11 @@ function bwlabel(x::AbstractVector)
     return L
 end
 
+nanunwrap!(𝜑) = (idxs = .!isnan.(𝜑); 𝜑[idxs] .= unwrap!(𝜑[idxs]))
 rewrap!(𝜑) = (𝜑 .= mod.(𝜑 .+ π, 2*π) .- π)
 
 function _generalized_phase(x::AbstractVector, fs, lp=0.0)
+    all(isnan.(x)) && return x
     nwin = 3; # Sets the 'buffer' to interpolate over after neg. freq. periods, in terms of the length of the neg. freq. window.
     𝛥𝑡 = 1/fs
     𝑠 = hilbert(x)
@@ -53,7 +56,7 @@ function _generalized_phase(x::AbstractVector, fs, lp=0.0)
         idx[idxs[1]:(idxs[1] + (idxs[end] - idxs[1])*nwin)] .= true
     end
     𝜑[idx] .= NaN
-    unwrap!(𝜑)
+    nanunwrap!(𝜑)
     naninterp!(𝜑)
     rewrap!(𝜑)
     return 𝜑
