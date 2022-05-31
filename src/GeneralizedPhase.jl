@@ -16,7 +16,7 @@ naninterp!(y; kw...) = ((f, idxs) = naninterp(y; kw...); y[.!idxs] .= f.(findall
 # The generalized-phase (matlab) package manually implements the Hilbert transform using the Marple method, since the `hilbert` matlab function must be locked inside the signal processing toolbox. The `hilbert` method from DSP does this already.
 analytic_signal(x::AbstractArray{<:Real}, dim::Int=ndims(x)) = mapslices(hilbert, x; dims=dim)
 
-# # Instantaneous freq. by taking the angle of the product of current and previous 𝑠
+# Instantaneous freq. by taking the angle of the product of current and previous 𝑠
 ifreq!(𝑠::AbstractVector, 𝛥𝑡) = (𝑠[1:end-1] .= angle.(𝑠[2:end] .* conj.(𝑠[1:end-1]))./(2*π*𝛥𝑡))
 ifreq(x, args...) = (y = deepcopy(x) |> real; ifreq!(y, args...); y)
 
