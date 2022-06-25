@@ -24,7 +24,7 @@ analytic_signal(x::AbstractArray{<:Real}, dim::Int=ndims(x)) = mapslices(hilbert
 
 # Instantaneous freq. by taking the angle of the product of current and previous 𝑠
 ifreq!(𝑠::AbstractVector, 𝛥𝑡) = (𝑠[1:end-1] .= angle.(𝑠[2:end] .* conj.(𝑠[1:end-1]))./(2*π*𝛥𝑡))
-ifreq(x, args...) = (y = deepcopy(x); ifreq!(y, args...); y[1:end-1] |> real)
+ifreq(x, args...) = (y = deepcopy(x); ifreq!(y, args...); y |> real)
 
 function bwlabel(x::AbstractVector)
     x = x .|> Bool
@@ -53,7 +53,8 @@ function _generalized_phase(x::AbstractVector, fs, lp=0.0)
     L = bwlabel(idx)
     for k in 1:maximum(L)
         idxs = findall(L .== k)
-        idx[idxs[1]:(idxs[1] + (idxs[end] - idxs[1])*nwin)] .= true
+        extr = min(length(idxs), (idxs[1] + (idxs[end] - idxs[1])*nwin))
+        idx[idxs[1]:extr] .= true
     end
     nanunwrap!(𝜑)
     𝜑[idx] .= NaN
