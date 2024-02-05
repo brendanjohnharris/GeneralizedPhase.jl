@@ -32,7 +32,7 @@ ỹ = GeneralizedPhase._phasefilter(y, fs)
 
 # ? --------------------------------- Plots -------------------------------- ? #
 colormap = :cyclic_mygbm_30_95_c78_n256_s25 # :cyclic_wrwbw_40_90_c42_n256_s25
-f = Figure(resolution=(1500, 500), backgroundcolor=:transparent)
+f = Figure(size=(1500, 500), backgroundcolor=:transparent)
 ax = Axis(f[1, 1], backgroundcolor=:transparent)
 lines!(ax, times, y, color=:gray50, linewidth=7, label="Raw signal")
 lines!(ax, times, ỹ; color=𝜑, linewidth=7, colormap, label="Filtered signal w/ generalized phase")
@@ -46,7 +46,7 @@ ins = Axis(f[1, 1],
             valign=:top,
             halign=:left,
             backgroundcolor=:transparent)
-text!(ins, "GP", align=(:center, :center), textsize=30, color=:gray50, position=CairoMakie.Point2f0(0, 0))
+text!(ins, "GP", align=(:center, :center), fontsize=30, color=:gray50, position=CairoMakie.Point2f0(0, 0))
 xlims!(ins, -1.5, 1.5); ylims!(ins, -1.5, 1.5)
 hidespines!(ins); hidedecorations!(ins)
 t = -0.01:0.01:2π; _x = cos.(t); _y = sin.(t)
@@ -57,16 +57,16 @@ print("Saved figure to "*file)
 
 
 # ? ------------ Compare generalized phase to temporal filtering ----------- ? #
-f = Figure(resolution=(600, 300), backgroundcolor=:transparent)
+f = Figure(=(600, 300), backgroundcolor=:transparent)
 ax = Axis(f[2, 1], backgroundcolor=:transparent)
-lines!(ax, times, generalized_phase(x, fs, lp), color=:crimson, linewidth=4, label="Generalized phase")
-lines!(ax, times, angle.(hilbert(ỹ)); color=:cornflowerblue, linewidth=4, label="Analytic phase after filtering")
+lines!(ax, times, angle.(hilbert(ỹ)); color=(:cornflowerblue, 0.8), linewidth=4, label="Analytic phase after filtering")
+lines!(ax, times, generalized_phase(x, fs, lp), color=(:crimson, 0.8), linewidth=4, label="Generalized phase")
 xlims!(0.06, 0.65)
 hidespines!(ax); hidedecorations!(ax)
 L = Legend(f[1, 1], ax,
             width=Relative(0.3),
             height=Relative(0.1),
-            bgcolor=:transparent,
+            backgroundcolor=:transparent,
             framevisible=false,
             labelcolor=:gray50,
             tellwidth=true,
