@@ -26,4 +26,3 @@ Manifest.toml
 # VS Code settings
 .vscode/*
 *.code-workspace
-*.mat
