@@ -57,7 +57,7 @@ print("Saved figure to "*file)
 
 
 # ? ------------ Compare generalized phase to temporal filtering ----------- ? #
-f = Figure(=(600, 300), backgroundcolor=:transparent)
+f = Figure(size=(600, 300), backgroundcolor=:transparent)
 ax = Axis(f[2, 1], backgroundcolor=:transparent)
 lines!(ax, times, angle.(hilbert(ỹ)); color=(:cornflowerblue, 0.8), linewidth=4, label="Analytic phase after filtering")
 lines!(ax, times, generalized_phase(x, fs, lp), color=(:crimson, 0.8), linewidth=4, label="Generalized phase")
