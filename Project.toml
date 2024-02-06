@@ -18,6 +18,7 @@ AxisKeysExt = ["AxisKeys"]
 AxisKeys = "0.2"
 DSP = "0.6, 0.7"
 Dierckx = "0.5"
+Statistics = "1"
 julia = "1.9"
 
 [extras]
