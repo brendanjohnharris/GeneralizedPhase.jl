@@ -1,8 +1,8 @@
-using GeneralizedPhase
-using DSP
-using MAT
-using HTTP
-using CairoMakie
+# using GeneralizedPhase
+# using DSP
+# using MAT
+# using HTTP
+# using CairoMakie
 
 # ? ------------------------------- Downloads ------------------------------ ? #
 fp, _ = mktemp()
@@ -49,7 +49,7 @@ ins = Axis(f[1, 1],
 text!(ins, "GP", align=(:center, :center), fontsize=30, color=:gray50, position=CairoMakie.Point2f0(0, 0))
 xlims!(ins, -1.5, 1.5); ylims!(ins, -1.5, 1.5)
 hidespines!(ins); hidedecorations!(ins)
-t = -0.01:0.01:2π; _x = cos.(t); _y = sin.(t)
+t = -pi:0.01:pi; _x = cos.(t); _y = sin.(t)
 lines!(ins, _x, _y; color=t, linewidth=25, colormap)
 file = try; normpath(@__DIR__, "../")*"example.png"; catch; mktemp()*".png"; end
 save(file, f; px_per_unit=5)
