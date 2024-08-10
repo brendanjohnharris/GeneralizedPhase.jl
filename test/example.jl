@@ -31,7 +31,7 @@ ỹ = GeneralizedPhase._phasefilter(y, fs)
 𝜑 = generalized_phase(y, fs, lp);
 
 # ? --------------------------------- Plots -------------------------------- ? #
-colormap = :cyclic_mygbm_30_95_c78_n256_s25 # :cyclic_wrwbw_40_90_c42_n256_s25
+colormap = cyclic #:cyclic_mygbm_30_95_c78_n256_s25 # :cyclic_wrwbw_40_90_c42_n256_s25
 f = Figure(size=(1500, 500), backgroundcolor=:transparent)
 ax = Axis(f[1, 1], backgroundcolor=:transparent)
 lines!(ax, times, y, color=:gray50, linewidth=7, label="Raw signal")
@@ -49,8 +49,9 @@ ins = Axis(f[1, 1],
 text!(ins, "GP", align=(:center, :center), fontsize=30, color=:gray50, position=CairoMakie.Point2f0(0, 0))
 xlims!(ins, -1.5, 1.5); ylims!(ins, -1.5, 1.5)
 hidespines!(ins); hidedecorations!(ins)
-t = -0.01:0.01:2π; _x = cos.(t); _y = sin.(t)
+t = -pi:0.01:π; _x = cos.(t); _y = sin.(t)
 lines!(ins, _x, _y; color=t, linewidth=25, colormap)
+file = try; normpath(@__DIR__, "../")*"example.pdf"; catch; mktemp()*".pdf"; end
 file = try; normpath(@__DIR__, "../")*"example.png"; catch; mktemp()*".png"; end
 save(file, f; px_per_unit=5)
 print("Saved figure to "*file)
@@ -77,3 +78,43 @@ rowsize!(f.layout, 1, Relative(0.05))
 file = try; normpath(@__DIR__, "../")*"comparison.png"; catch; mktemp()*".png"; end
 save(file, f; px_per_unit=5)
 print("Saved figure to "*file)
+
+begin
+    using Random
+    Random.seed!(2)
+ts = 0:0.001:10
+x = sin.(0.5π*ts) #.+ (cos.(2π*ts.+0.5).^2)
+x = sin.(0.5π*ts) .+ 0.3.*(randn(length(x)))
+x = GeneralizedPhase._phasefilter(x, 1000; band=[0.5, 2])
+ϕ = angle.(hilbert(x))
+# ϕ =  _generalized_phase(x, 1000);
+ y = x[6900:7800]
+ p = ϕ[6900:7800]
+ lines(y)
+ lines!(p.*5)
+current_figure()
+
+colormap = cyclic #:cyclic_mygbm_30_95_c78_n256_s25 # :cyclic_wrwbw_40_90_c42_n256_s25
+f = Figure(size=(1500, 500), backgroundcolor=:transparent)
+ax = Axis(f[1, 1], backgroundcolor=:transparent)
+lines!(ax, y; color=p.+pi, linewidth=20, colormap, label="Filtered signal w/ generalized phase", linecap=:round)
+hidedecorations!(ax)
+hidespines!(ax)
+
+
+ins = Axis(f[1, 1],
+            width=Relative(0.3),
+            height=Relative(0.3),
+            aspect=DataAspect(),
+            valign=:top,
+            halign=:left,
+            backgroundcolor=:transparent)
+text!(ins, "GP", align=(:center, :center), fontsize=30, color=:gray50, position=CairoMakie.Point2f0(0, 0))
+xlims!(ins, -1.5, 1.5); ylims!(ins, -1.5, 1.5)
+hidespines!(ins); hidedecorations!(ins)
+t = -pi:0.01:pi; _x = cos.(t); _y = sin.(t)
+lines!(ins, _x, _y; color=t, linewidth=25, colormap)
+file = try; normpath(@__DIR__, "../")*"example_2.pdf"; catch; mktemp()*".pdf"; end
+save(file, f; px_per_unit=5)
+f
+end
