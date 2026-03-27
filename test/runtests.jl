@@ -4,6 +4,7 @@ using SafeTestsets
     using AxisKeys
     using GeneralizedPhase
     using Test
+    using HTTP
     using CairoMakie
 
     @testset "Muller example" begin
